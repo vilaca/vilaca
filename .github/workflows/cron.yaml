@@ -1,7 +1,7 @@
 name: Refresh list
 on:
-  push:
-    branches: [ "*" ]
+  schedule:
+    - cron: "50 18 * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
@@ -15,7 +15,7 @@ jobs:
       shell: bash
       run: |
         export FILENAME=$(./src/today.sh)
-        go run src/extract.go > archive/$FILENAME
+        go run src/extract.go | sort -nr > archive/$FILENAME
         (go run src/rank.go < archive/$FILENAME) > README.md
 
     - name: Extract branch name
@@ -26,5 +26,4 @@ jobs:
       uses: actions-js/push@v1.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-        force: true
+        branch: ${{ steps.extract_branch.outputs.branch }}
