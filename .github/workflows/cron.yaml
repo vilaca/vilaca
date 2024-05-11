@@ -1,0 +1,30 @@
+name: Refresh list
+on:
+  push:
+    branches: [ "*" ]
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git clone
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Build
+      shell: bash
+      run: |
+        export FILENAME=$(./src/today.sh)
+        go run src/extract.go > archive/$FILENAME
+        (go run src/rank.go < archive/$FILENAME) > README.md
+
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: GitHub Commit & Push
+      uses: actions-js/push@v1.3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        force: true
