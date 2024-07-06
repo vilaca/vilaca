@@ -28,6 +28,7 @@ func main() {
 		if stars < 2 {
 			continue
 		}
+		forks, _ := strconv.Atoi(items[1])
 		repo := items[4]
 		desc := ""
 		for i := 7; i < len(items); i++ {
@@ -36,7 +37,7 @@ func main() {
 			}
 			desc += items[i]
 		}
-		concatenatedText += fmt.Sprintf("|%d|[**%s**](https://github.com/vilaca/%s)<br>%s|%d|\n", position, repo, repo, desc, stars)
+		concatenatedText += fmt.Sprintf("|%d|[**%s**](https://github.com/vilaca/%s)<br>%s|%d|%d|\n", position, repo, repo, desc, stars, forks)
 		position += 1
 	}
 	if err := scanner.Err(); err != nil {
@@ -44,9 +45,9 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("### Hi there 👋")
-	fmt.Println("These are my most popular repositories ranked by the amount of stars they got:<br>")
-	fmt.Println("| |Repository|Stars|")
-	fmt.Println("|:---:|:---|:---:|")
+	fmt.Println("These are my most popular repositories ranked by the amount of stars awarded:<br>")
+	fmt.Println("| |Repository|Stars|Forks|")
+	fmt.Println("|:---:|:---|:---:|:---:|")
 	fmt.Println(concatenatedText)
 	now := time.Now()
 	day := now.Day()
