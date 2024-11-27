@@ -1,5 +1,5 @@
 ### Hi there 👋
-These are my most popular repositories ranked by the amount of stars awarded:<br>
+These are my most popular repositories ranked by the amount of stars:<br>
 | |Repository|Stars|Forks|
 |:---:|:---|:---:|:---:|
 |1|[**awesome-k8s-tools**](https://github.com/vilaca/awesome-k8s-tools)<br>List of container/k8s tools.|864|89|
