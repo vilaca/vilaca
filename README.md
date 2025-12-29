@@ -9,4 +9,4 @@ These are my most popular repositories ranked by the amount of stars awarded:<br
 |5|[**prometheus-cookbook**](https://github.com/vilaca/prometheus-cookbook)<br>Prometheus alerting, monitoring and observability.|8|1|
 |6|[**snake-in-space**](https://github.com/vilaca/snake-in-space)<br>Eat donuts to get bigger, blast the spiky foes (Pygame)|4|0|
 
-<sub>This list is compiled automatically using Go, Github Actions and the Github API and was last updated on 28/December/2025.</sub>
+<sub>This list is compiled automatically using Go, Github Actions and the Github API and was last updated on 29/December/2025.</sub>
