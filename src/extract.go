@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -18,12 +19,20 @@ type Repository struct {
 	Description string `json:"description"`
 }
 
-func getPublicRepos(username string) ([]Repository, error) {
+func getPublicRepos(username string, token string) ([]Repository, error) {
 	allRepos := make([]Repository, 0)
 	page := 1
+	client := &http.Client{}
 	for {
 		url := fmt.Sprintf("https://api.github.com/users/%s/repos?page=%d&per_page=100", username, page)
-		resp, err := http.Get(url)
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return nil, err
+		}
+		if token != "" {
+			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+		}
+		resp, err := client.Do(req)
 		if err != nil {
 			return nil, err
 		}
@@ -49,7 +58,8 @@ func getPublicRepos(username string) ([]Repository, error) {
 
 func main() {
 	username := "vilaca"
-	repos, err := getPublicRepos(username)
+	token := os.Getenv("GITHUB_TOKEN")
+	repos, err := getPublicRepos(username, token)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return

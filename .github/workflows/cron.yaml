@@ -2,6 +2,7 @@ name: Refresh list
 on:
   schedule:
     - cron: "0 0 * * *"
+  workflow_dispatch:
 jobs:
   cron:
     runs-on: ubuntu-latest
@@ -13,9 +14,50 @@ jobs:
         fetch-depth: 0
     - name: Build
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        set -e
         export FILENAME=$(./src/today.sh)
+
+        # Fetch and sort repository data
         go run src/extract.go | sort -nr > archive/$FILENAME
+
+        # Check if archive contains error message
+        if grep -q "^Error:" archive/$FILENAME; then
+          echo "=========================================="
+          echo "ERROR: Failed to fetch repository data"
+          echo "=========================================="
+          echo ""
+          echo "Error Message:"
+          cat archive/$FILENAME
+          echo ""
+          echo "Archive file: archive/$FILENAME"
+          echo ""
+
+          # Find last successful archive
+          LAST_SUCCESS=$(ls -1 archive/ 2>/dev/null | grep -v "^Error" | tail -2 | head -1)
+          if [ -n "$LAST_SUCCESS" ]; then
+            echo "Last successful fetch: $LAST_SUCCESS"
+            echo "Last successful repo count: $(wc -l < archive/$LAST_SUCCESS | tr -d ' ')"
+          else
+            echo "Last successful fetch: Unknown"
+          fi
+          echo ""
+
+          # Check GitHub API rate limit
+          echo "GitHub API Rate Limit Status:"
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/rate_limit | \
+            grep -E '"rate"|"limit"|"remaining"|"reset"' || echo "Unable to fetch rate limit info"
+          echo ""
+          echo "=========================================="
+          echo "Preserving existing README.md (not overwriting)"
+          echo "=========================================="
+          exit 1
+        fi
+
+        # Only update README if data fetch succeeded
         (go run src/rank.go < archive/$FILENAME) > README.md
 
     - name: Extract branch name
