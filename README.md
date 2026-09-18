@@ -11,4 +11,4 @@ These are my most popular repositories ranked by the amount of stars awarded:<br
 |7|[**factory**](https://github.com/vilaca/factory)<br>🏭 Coding agent CLI engineered to make any LLM — local or cloud, frontier or 7B — actually useful. 16 providers, multi-tab sessions, automatic key+model failover, plan-mode review, MCP, and recovery loops for models that misbehave.|3|0|
 |8|[**cursor-chat-cleaner**](https://github.com/vilaca/cursor-chat-cleaner)<br>CLI to list, view, back up, and delete Cursor chats on macOS|2|0|
 
-<sub>This list is compiled automatically using Go, Github Actions and the Github API and was last updated on 17/September/2026.</sub>
+<sub>This list is compiled automatically using Go, Github Actions and the Github API and was last updated on 18/September/2026.</sub>
